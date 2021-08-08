@@ -1,5 +1,7 @@
 # user-task-frontend
 
+Currently not working - Form validation
+
 ## Project setup
 ```
 npm install
