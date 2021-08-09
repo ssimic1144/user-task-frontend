@@ -1,7 +1,6 @@
 <template>
   <div>
-      <p class="mt-5">{{form_description}}</p>
-      <FormRenderer class="text-left" :form-configuration="formData" v-model="formInputData" />
+      <FormRenderer class="text-left mt-5" :form-configuration="formData" v-model="formInputData" />
       <!--
       <button class="btn btn-success mt-4" v-on:click="get_data_from_form">Send form</button>
       -->
@@ -15,7 +14,6 @@ import controls_helper from '../utils/controls_helper_specification'
 import sections_helper from "../utils/section_helper_specification"
 import form_config_helper from "../utils/form_config_helper_specification"
 import validation_helper from "../utils/validation_helper_specification"
-//import form from "../utils/test"
 
 export default {
     name:"Form",
@@ -78,6 +76,20 @@ export default {
         new_section_helper.uniqueId = new_section_id
         new_section[new_section_id] = new_section_helper
 
+        //If there is documentation, add it at the begining of the form 
+        if (this.form_description !== null){
+            var new_documentation = {}
+            var new_documentation_id = "control-"+uuidv4()
+            var new_documentation_helper = JSON.parse(JSON.stringify(controls_helper["documentation"]))
+            new_documentation = new_documentation_helper
+            new_documentation.uniqueId = new_documentation_id
+            new_documentation.text = this.form_description
+
+            //Putting finished documentation into support variable
+            controls_array_for_section.push(new_documentation_id)
+            controls_dict[new_documentation_id] = new_documentation
+        }
+
         Object.keys(get_engine_response).forEach(response_key => {
             console.log(get_engine_response[response_key].type)
             Object.keys(controls_helper).forEach(helper_key => {
@@ -110,8 +122,9 @@ export default {
                     }
                     if (get_engine_response[response_key].type === "yes-no-boolean"){
                         new_control.items = []
-                        var yes_item = {"value":true, "text":"Da"}
-                        var no_item = {"value":false, "text":"Ne"}
+                        //Currently as strings -> later as bool values
+                        var yes_item = {"value":"true", "text":"Da"}
+                        var no_item = {"value":"false", "text":"Ne"}
                         new_control.items.push(yes_item)
                         new_control.items.push(no_item)
                     }
@@ -121,7 +134,7 @@ export default {
                             if(validation_rule === validation_key){
                               
                                 var new_validation = JSON.parse(JSON.stringify(validation_helper[validation_key]))
-                                if(validation_rule === "max"){
+                                if(validation_rule === "max" || validation_rule === "min"){
                                     new_validation.additionalValue = get_engine_response[response_key].validation[validation_rule]
                                 }
 
@@ -176,12 +189,11 @@ export default {
         //What to do when button is clicked with emitEventCode
         this.$formEvent.$on("submit_form", () => {
             console.log("click")
-            //this.get_data_from_form()
+            this.get_data_from_form()
         })
 
         console.log(new_button.isRunValidation)
 
-        //this.formData = form
         
     }
 }
