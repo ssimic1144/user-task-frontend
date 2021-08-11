@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <div class="position-absolute top-50 start-50 translate-middle">
-      <button class="btn btn-primary" v-on:click="start_bpmn_proces">Start internship application process</button>
+      <button class="btn btn-primary" v-on:click="start_bpmn_proces">Start process</button>
     </div>
   </div>
 </template>

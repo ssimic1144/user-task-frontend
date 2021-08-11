@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
-    "v-form-builder": "github:markocunj/vue-form-builder",
+    "v-form-builder": "github:ssimic1144/vue-form-builder",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0"
   },
