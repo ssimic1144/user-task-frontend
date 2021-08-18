@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="formData">
       <FormRenderer class="text-left mt-5" :form-configuration="formData" v-model="formInputData" />
   </div>
 </template>

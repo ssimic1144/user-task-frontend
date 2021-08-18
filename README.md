@@ -8,8 +8,7 @@ Core of this application is `Form.vue` which creates form based on specification
 
 ---
 
-- Currently not working
-    - Form validation
+> You will need to change URL from 0.0.0.0 to the real one once you deploy the engine and this applications 
 
 ---
 
