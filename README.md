@@ -8,7 +8,7 @@ Core of this application is `Form.vue` which creates form based on specification
 
 ---
 
-> You will need to change URL from 0.0.0.0 to the real one once you deploy the engine and this applications 
+> You will need to change URL from 0.0.0.0 to the real one, once you deploy the engine and this application 
 
 ---
 
