@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Form from "../views/Form.vue"
+import CompletedForm from "../views/CompletedForm.vue"
 
 Vue.use(VueRouter)
 
@@ -15,6 +16,11 @@ const routes = [
     path:"/form/:instance/:task",
     name:"Form",
     component: Form
+  },
+  {
+    path:"/form/:instance/:task/completed/:type",
+    name:"CompletedForm",
+    component: CompletedForm
   }
 ]
 

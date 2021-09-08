@@ -1,7 +1,20 @@
 <template>
-  <div v-if="formData">
-      <FormRenderer class="text-left mt-5" :form-configuration="formData" v-model="formInputData" />
-  </div>
+    <div >
+        <div v-if="current_task">
+            <div v-if="formData">
+                <FormRenderer class="text-left mt-5" :form-configuration="formData" v-model="formInputData" />
+            </div>
+        </div>
+        <div v-else class="position-absolute top-50 start-50 translate-middle">
+            <!-- Message in case Form is already completed OR instance/task is not currently running on the BPMN engine -->
+            <h3>
+                Ova forma je već ispunjena ili nije još red da bude ispunjena.
+            </h3>
+            <h3>
+                Molimo provjerite mail ili Slack da vidite koja vam je forma na redu.
+            </h3>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -28,11 +41,12 @@ export default {
             engine_response:null,
             controls_array_for_section:[],
             controls_dict:{},
-            section_dict:{}
+            section_dict:{},
+            current_task:false
         }
     },
     methods:{
-        get_data_from_form(){
+        async get_data_from_form(){
             //Make adjustments to data if needed
             Object.keys(this.engine_response).forEach(engine_key => {
                 if(this.engine_response[engine_key].type === "file"){
@@ -50,10 +64,17 @@ export default {
                 }
             })
             //Post data to the engine
-            fetch(`http://0.0.0.0:8080/instance/${this.$route.params.instance}/task/${this.$route.params.task}/form`,{
+            var rawRes = await fetch(`http://0.0.0.0:8080/instance/${this.$route.params.instance}/task/${this.$route.params.task}/form`,{
                 method:"POST",
                 body:JSON.stringify(this.formInputData)
             })
+            var content = await rawRes.json()
+            if (String(content.status) === "OK"){
+                this.$router.push(`/form/${this.$route.params.instance}/${this.$route.params.task}/completed/ok`)
+            }
+            else{
+                this.$router.push(`/form/${this.$route.params.instance}/${this.$route.params.task}/completed/error`)
+            }
         },
         create_control(type, data=null, key=null){
             //Control setup
@@ -97,7 +118,7 @@ export default {
             }
             if (type === "button"){
                 new_control.emitEventCode = "submit_form"
-                new_control.emitEventData = this.formInputData
+                new_control.emitEventData = "data"
             }
 
             if (data !== null && key!== null){
@@ -148,6 +169,16 @@ export default {
         }
     },
     async created(){
+        //Check if the form task is current task on the engine
+        await fetch(`http://0.0.0.0:8080/instance/${this.$route.params.instance}`,{
+            method:"GET"
+        }).then(res => {return res.json()}).then(data => {
+            data.pending.forEach(task => {
+                if (this.$route.params.task === task){
+                    this.current_task = true
+                }
+            })
+        })
         //Get User Task information
         let get_engine_response = await fetch(`http://0.0.0.0:8080/instance/${this.$route.params.instance}/task/${this.$route.params.task}`,{
             method:"GET"

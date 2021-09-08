@@ -26,14 +26,12 @@ export default {
       }).then(response => {
         return response.json()
       }).then(data => {
-        console.log(data.id)
         this.instance = data.id
         fetch(`http://0.0.0.0:8080/instance/${this.instance}`,{
             method:"GET"
           }).then(response => {
             return response.json()
           }).then(data => {
-            console.log(data.pending[0])
             this.task = data.pending[0]
             this.$router.push(`/form/${this.instance}/${this.task}`)
           })
