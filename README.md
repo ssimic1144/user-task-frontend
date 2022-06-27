@@ -6,12 +6,6 @@ At the current stage this application starts the process on the engine and it as
 
 Core of this application is `Form.vue` which creates form based on specifications in **User Task**, supported fields can be seen [here](https://github.com/ssimic1144/python-bpmn-engine). Custom form field types are also supported, some of which you can find in `Form.vue`, but if you need more of them, to fulfil your business goals, you will need to extend current *Special cases for controls*.
 
----
-
-> You will need to change URL from 0.0.0.0 to the real one, once you deploy the engine and this application 
-
----
-
 ## Project setup
 ```
 npm install
